@@ -2,9 +2,8 @@ import Home from "./pages/Home";
 
 function App() {
   return (
-    <div>
+    <div className="bg-black h-screen">
       <Home />
-      <h1>Hello world</h1>
     </div>
   );
 }
