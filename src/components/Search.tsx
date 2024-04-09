@@ -1,33 +1,33 @@
-import axios from "axios";
 import { useState } from "react";
 
-interface SearchResult {}
+interface SearchProps {
+  handleSearch: (searchParams: string) => void;
+}
 
-const Search: React.FC<SearchResult> = () => {
+const Search: React.FC<SearchProps> = ({ handleSearch }) => {
   const [searchParams, setSearchParams] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = async () => {
-    try {
-      const formattedSearchParams = searchParams.replace(/\s/g, "_");
-      const response = await axios.get(
-        `http://localhost:3333/movies/search?query=${formattedSearchParams}`
-      );
-      setSearchResults(response.data);
-    } catch (error) {
-      console.error("Error searching:", error);
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearch(searchParams);
+  };
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch(searchParams);
     }
   };
+
   return (
     <div className="container mx-auto px-4">
       <form
-        onSubmit={handleSearch}
+        onSubmit={onSubmit}
         className="flex items-center justify-center mb-4"
       >
         <input
           type="text"
           value={searchParams}
           onChange={(e) => setSearchParams(e.target.value)}
+          onKeyDown={handleKeyPress}
           className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300 m-2 w-full sm:w-3/5"
           placeholder="Search..."
         />
@@ -38,7 +38,6 @@ const Search: React.FC<SearchResult> = () => {
           Search
         </button>
       </form>
-      <div className="mt-4">{searchResults}</div>
     </div>
   );
 };
