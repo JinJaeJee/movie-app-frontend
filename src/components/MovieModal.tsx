@@ -28,7 +28,7 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, closeModal }) => {
       onClick={closeModal}
     >
       <div
-        className="bg-white rounded-lg shadow-md overflow-hidden max-w-2xl w-full px-4 py-5"
+        className="bg-white rounded-lg shadow-md overflow-hidden max-w-2xl w-full px-8 py-5 md:px-10 md:py-8 sm:mx-4 md:mx-8 lg:mx-auto"
         onClick={handleClickInsideModal}
       >
         <div className="flex justify-between items-center mb-4">
@@ -36,17 +36,17 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, closeModal }) => {
           <button
             type="button"
             onClick={closeModal}
-            className="focus:outline-none"
+            className="focus:outline-none absolute right-4 top-4 md:static md:right-auto md:top-auto hover:text-red-500 transition duration-200 ease-in-out"
           >
-            <FaTimes size={24} className="text-gray-800 hover:text-red-500" />
+            <FaTimes size={24} className="text-gray-800" />
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex items-center justify-center">
             <img
               src={movie.thumbnailUrl}
               alt={movie.title}
-              className="w-full rounded-lg object-cover"
+              className="w-full rounded-lg object-cover md:w-full sm:w-full xs:w-full"
             />
           </div>
           <div>

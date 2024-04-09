@@ -11,25 +11,25 @@ const SortMovies: React.FC<SortMoviesProps> = ({ onSort }) => {
   };
 
   return (
-    <div className="flex items-center justify-end space-x-4 pb-5">
-      <label className="text-white" htmlFor="sort-by-year">
+    <div className="flex flex-wrap items-center justify-end space-x-4 pb-5">
+      <label className="text-white mr-2" htmlFor="sort-by-year">
         Sort by Year:
       </label>
       <select
         id="sort-by-year"
         onChange={handleSortChange}
-        className="border border-gray-300 rounded-md p-1"
+        className="border border-gray-300 rounded-md p-1 w-full sm:w-auto"
       >
         <option value="ascending">Low to High</option>
         <option value="descending">High to Low</option>
       </select>
-      <label className="text-white" htmlFor="sort-by-rating">
+      <label className="text-white mr-2" htmlFor="sort-by-rating">
         Sort by Rating:
       </label>
       <select
         id="sort-by-rating"
         onChange={handleSortChange}
-        className="border border-gray-300 rounded-md p-1"
+        className="border border-gray-300 rounded-md p-1 w-full sm:w-auto"
       >
         <option value="high-to-low">High to Low</option>
         <option value="low-to-high">Low to High</option>

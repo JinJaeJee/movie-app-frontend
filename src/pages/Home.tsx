@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MovieList from "../components/MovieList";
-import NavbarRightItem from "../components/NavbarRightItem";
 import Search from "../components/Search";
+import Navbar from "../components/Navbar";
 
 interface Movie {
   _id: string;
@@ -29,20 +29,12 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <header className="px-10 py-20 z-1000 w-full flex justify-between items-center transition duration-500">
-        <a
-          className="cursor-pointer font-bold text-white tracking-wider"
-          href="/"
-        >
-          Movie Application
-        </a>
-        <ul>
-          <NavbarRightItem />
-        </ul>
-      </header>
-      <Search />
-      <MovieList movies={movies} />
+    <div className="min-h-screen">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
+        <Search />
+        <MovieList movies={movies} />
+      </div>
     </div>
   );
 };

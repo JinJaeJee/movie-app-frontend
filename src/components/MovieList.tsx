@@ -2,6 +2,7 @@ import { FaStar } from "react-icons/fa";
 import MovieModal from "./MovieModal";
 import { useEffect, useState } from "react";
 import SortMovies from "./SortMovie";
+import Pagination from "./Pagination";
 
 interface Movie {
   _id: string;
@@ -21,12 +22,17 @@ interface MovieListProps {
 const MovieList: React.FC<MovieListProps> = ({ movies }) => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [sortedMovies, setSortedMovies] = useState<Movie[]>(movies);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9);
 
   useEffect(() => {
     setSortedMovies(movies);
   }, [movies]);
 
-  console.log(sortedMovies);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentMovies = sortedMovies.slice(indexOfFirstItem, indexOfLastItem);
+
   const openModal = (movie: Movie) => {
     setSelectedMovie(movie);
   };
@@ -49,12 +55,16 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
     setSortedMovies(sorted || []);
   };
 
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="container mx-auto px-4 pb-10">
       <h1 className="text-3xl font-bold my-8 text-white">Movie List</h1>
       <SortMovies onSort={handleSort} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {sortedMovies.map((movie) => (
+        {currentMovies.map((movie) => (
           <div
             key={movie.id}
             className="relative flex flex-col curser-pointer"
@@ -89,6 +99,13 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
       {selectedMovie && (
         <MovieModal movie={selectedMovie} closeModal={closeModal} />
       )}
+      <div className="flex justify-center mt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(sortedMovies.length / itemsPerPage)}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
