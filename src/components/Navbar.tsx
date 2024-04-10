@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { NAV_RIGHTS } from "../constants/data/navbar";
 import { FaRegStar, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { useAuth } from "./AuthProvider";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
   const [isUserLogin, setIsUserLogin] = useState(false);
 
   const handleLogout = () => {
     setIsUserLogin(!isUserLogin);
+    logout();
   };
 
   return (
@@ -44,7 +47,7 @@ const Navbar = () => {
               className="text-white text-base font-medium hover:underline pr-10"
               href="#"
             >
-              Fullname
+              {user?.fullname}
             </a>
 
             <button className="text-white text-base font-medium hover:underline pr-4">

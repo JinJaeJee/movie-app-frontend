@@ -59,6 +59,10 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
     setCurrentPage(pageNumber);
   };
 
+  const handleClickInsideModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className="container mx-auto px-4 pb-10">
       <h1 className="text-3xl font-bold my-8 text-white">Movie List</h1>
@@ -78,10 +82,12 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
                 alt={movie.title}
                 className="object-cover object-center w-full h-full rounded-md"
               />
-              <FaStar
-                className="absolute top-2 right-2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                size={30}
-              />
+              <div onClick={handleClickInsideModal}>
+                <FaStar
+                  className="absolute top-2 right-2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  size={30}
+                />
+              </div>
             </div>
             <div className="bg-gray-100 p-4 rounded">
               <h2 className="text-xl font-semibold mb-2">{movie.title}</h2>

@@ -1,13 +1,18 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "./AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
-  email: string;
+  username: string;
   password: string;
   confirmPassword?: string;
 }
 
 const AuthForm: React.FC = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const {
     register,
@@ -16,8 +21,23 @@ const AuthForm: React.FC = () => {
     watch,
   } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
-    console.log(data); // TODO replace this with your authentication logic later
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3333/auth/login",
+        data
+      );
+      if (response.status === 200) {
+        const { token, userProfile } = response.data;
+        login(token, userProfile);
+        console.log(1);
+        navigate("/");
+      } else {
+        console.error("Login failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (
@@ -33,21 +53,21 @@ const AuthForm: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-6">
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-sm font-medium text-gray-300"
             >
-              Email
+              Username
             </label>
             <input
-              type="email"
-              id="email"
-              placeholder="your@email.com"
+              type="username"
+              id="username"
+              placeholder="username"
               className="w-full px-3 py-2 rounded-lg border border-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-600"
-              {...register("email", { required: true })}
+              {...register("username", { required: true })}
             />
-            {errors.email && (
+            {errors.username && (
               <span className="text-xs text-red-500 mt-2">
-                Email is required
+                username is required
               </span>
             )}
           </div>
