@@ -17,9 +17,10 @@ interface Movie {
 
 interface MovieListProps {
   movies: Movie[];
+  addToFavorites: (movie: Movie) => void;
 }
 
-const MovieList: React.FC<MovieListProps> = ({ movies }) => {
+const MovieList: React.FC<MovieListProps> = ({ movies, addToFavorites }) => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [sortedMovies, setSortedMovies] = useState<Movie[]>(movies);
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,6 +87,10 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
                 <FaStar
                   className="absolute top-2 right-2 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   size={30}
+                  onClick={(e) => {
+                    addToFavorites(movie);
+                    e.stopPropagation();
+                  }}
                 />
               </div>
             </div>

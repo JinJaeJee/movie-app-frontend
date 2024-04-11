@@ -46,12 +46,28 @@ const Home: React.FC = () => {
     }
   };
 
+  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
+
+  const addToFavorites = (movie: Movie) => {
+    setFavoriteMovies([...favoriteMovies, movie]);
+  };
+
+  const removeFromFavorites = (movie: Movie) => {
+    setFavoriteMovies(favoriteMovies.filter((m) => m !== movie));
+  };
+
   return (
     <div className="min-h-screen">
-      <Navbar />
+      <Navbar
+        favoriteMovies={favoriteMovies}
+        removeFromFavorites={removeFromFavorites}
+      />
       <div className="container mx-auto px-4 py-8">
         <Search handleSearch={handleSearch} />
-        <MovieList movies={searchResults.length > 0 ? searchResults : movies} />
+        <MovieList
+          movies={searchResults.length > 0 ? searchResults : movies}
+          addToFavorites={addToFavorites}
+        />
       </div>
     </div>
   );

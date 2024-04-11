@@ -1,16 +1,42 @@
 import { useState } from "react";
 import { NAV_RIGHTS } from "../constants/data/navbar";
-import { FaRegStar, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaRegStar, FaSignInAlt, FaSignOutAlt, FaTrash } from "react-icons/fa";
 import { useAuth } from "./AuthProvider";
 
-const Navbar = () => {
+interface Movie {
+  _id: string;
+  id: number;
+  title: string;
+  genre: string[];
+  releaseYear: number;
+  description: string;
+  thumbnailUrl: string;
+  rating: number;
+}
+
+interface NavbarProps {
+  favoriteMovies: Movie[];
+  removeFromFavorites: (movie: Movie) => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({
+  favoriteMovies,
+  removeFromFavorites,
+}) => {
   const { user, logout } = useAuth();
   const [isUserLogin, setIsUserLogin] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
+
+  const toggleFavorites = () => {
+    setShowFavorites(!showFavorites);
+  };
 
   const handleLogout = () => {
     setIsUserLogin(!isUserLogin);
     logout();
   };
+
+  console.log(user?.image);
 
   return (
     <header className="bg-zinc-900 px-4 py-2 flex justify-between items-center sticky top-0 z-50 transition duration-500 text-white pt-5">
@@ -38,20 +64,20 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             <div className="flex-shrink-0 pr-1">
               <img
-                src="https://i.pravatar.cc/40?u=fakeuser"
+                src={user?.image}
                 alt="Avatar"
                 className="w-6 h-6 rounded-full"
               />
             </div>
             <a
-              className="text-white text-base font-medium hover:underline pr-10"
+              className="text-white text-base font-medium hover:underline pr-5"
               href="#"
             >
               {user?.fullname}
             </a>
 
             <button className="text-white text-base font-medium hover:underline pr-4">
-              <FaRegStar className="w-5 h-5" />
+              <FaRegStar className="w-5 h-5" onClick={toggleFavorites} />
             </button>
             <button
               className="text-white text-base font-medium hover:underline"
@@ -74,6 +100,25 @@ const Navbar = () => {
           </div>
         )}
       </div>
+      {showFavorites && favoriteMovies.length > 0 && (
+        <div className="absolute top-16 right-0 bg-gray-800 rounded-lg p-4 shadow-md">
+          <h3 className="text-white font-bold mb-2">Favorite Movies</h3>
+          {favoriteMovies.map((movie, index) => (
+            <div key={index} className="flex items-center justify-between mb-2">
+              <img
+                src={movie.thumbnailUrl}
+                alt={movie.title}
+                className="w-10 h-10 rounded-md"
+              />
+              <span className="text-white">{movie.title}</span>
+              <FaTrash
+                className="w-4 h-4 text-red-500 cursor-pointer"
+                onClick={() => removeFromFavorites(movie)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </header>
   );
 };
