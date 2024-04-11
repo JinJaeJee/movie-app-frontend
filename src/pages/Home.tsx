@@ -3,6 +3,7 @@ import MovieList from "../components/MovieList";
 import Search from "../components/Search";
 import Navbar from "../components/Navbar";
 import axios from "axios";
+import { useAuth } from "../components/AuthProvider";
 
 interface Movie {
   _id: string;
@@ -16,8 +17,12 @@ interface Movie {
 }
 
 const Home: React.FC = () => {
+  const { user } = useAuth();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
+  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
+
+  console.log(user?.userID);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -34,6 +39,26 @@ const Home: React.FC = () => {
     fetchMovies();
   }, []);
 
+  useEffect(() => {
+    const fetchFavoriteMovies = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3333/favorite-movies/${user?.userID}`
+        );
+
+        console.log(response.data);
+
+        setFavoriteMovies(response.data);
+      } catch (error) {
+        console.error("Error fetching favorite movies:", error);
+      }
+    };
+
+    if (user?.userID) {
+      fetchFavoriteMovies();
+    }
+  }, []);
+
   const handleSearch = async (searchParams: string) => {
     try {
       const formattedSearchParams = searchParams.replace(/\s/g, "_");
@@ -46,14 +71,15 @@ const Home: React.FC = () => {
     }
   };
 
-  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
-
-  const addToFavorites = (movie: Movie) => {
-    setFavoriteMovies([...favoriteMovies, movie]);
-  };
+  const addToFavorites = () => {};
 
   const removeFromFavorites = (movie: Movie) => {
-    setFavoriteMovies(favoriteMovies.filter((m) => m !== movie));
+    const userFavoritesKey = `user_${user?.userID}_favorites`;
+    const updatedFavorites = favoriteMovies.filter(
+      (m: Movie) => m._id !== movie._id
+    );
+    localStorage.setItem(userFavoritesKey, JSON.stringify(updatedFavorites));
+    setFavoriteMovies(updatedFavorites);
   };
 
   return (

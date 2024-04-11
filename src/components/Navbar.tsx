@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { NAV_RIGHTS } from "../constants/data/navbar";
-import { FaRegStar, FaSignInAlt, FaSignOutAlt, FaTrash } from "react-icons/fa";
+
+import { FaRegStar, FaSignOutAlt, FaTrash } from "react-icons/fa";
 import { useAuth } from "./AuthProvider";
 
 interface Movie {
@@ -24,7 +24,8 @@ const Navbar: React.FC<NavbarProps> = ({
   removeFromFavorites,
 }) => {
   const { user, logout } = useAuth();
-  const [isUserLogin, setIsUserLogin] = useState(false);
+  console.log("favoriteMovies", favoriteMovies);
+
   const [showFavorites, setShowFavorites] = useState(false);
 
   const toggleFavorites = () => {
@@ -32,7 +33,6 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   const handleLogout = () => {
-    setIsUserLogin(!isUserLogin);
     logout();
   };
 
@@ -47,58 +47,37 @@ const Navbar: React.FC<NavbarProps> = ({
         Movie Application
       </a>
       <nav className="hidden md:flex md:items-center md:gap-4">
-        {isUserLogin ? (
-          <ul className="space-y-2 flex flex-col">
-            {NAV_RIGHTS.map((link, index) => (
-              <li key={index} className="py-1">
-                <a
-                  className="text-white text-base font-medium hover:underline"
-                  href={link.url}
-                >
-                  {link.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="flex items-center gap-2">
-            <div className="flex-shrink-0 pr-1">
-              <img
-                src={user?.image}
-                alt="Avatar"
-                className="w-6 h-6 rounded-full"
-              />
-            </div>
-            <a
-              className="text-white text-base font-medium hover:underline pr-5"
-              href="#"
-            >
-              {user?.fullname}
-            </a>
-
-            <button className="text-white text-base font-medium hover:underline pr-4">
-              <FaRegStar className="w-5 h-5" onClick={toggleFavorites} />
-            </button>
-            <button
-              className="text-white text-base font-medium hover:underline"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+        <div className="flex items-center gap-2">
+          <div className="flex-shrink-0 pr-1">
+            <img
+              src={user?.image}
+              alt="Avatar"
+              className="w-6 h-6 rounded-full"
+            />
           </div>
-        )}
+          <a
+            className="text-white text-base font-medium hover:underline pr-5"
+            href="#"
+          >
+            {user?.fullname}
+          </a>
+
+          <button className="text-white text-base font-medium hover:underline pr-4">
+            <FaRegStar className="w-5 h-5" onClick={toggleFavorites} />
+          </button>
+          <button
+            className="text-white text-base font-medium hover:underline"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
       </nav>
       <div className="flex gap-2 items-center justify-center md:hidden text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition duration-150 ease-in-out">
-        {isUserLogin ? (
-          <div>
-            <FaSignInAlt className="w-6 h-6 cursor-pointer hover:text-red-500" />
-          </div>
-        ) : (
-          <div className="flex flex-col space-y-2">
-            <FaRegStar className="w-6 h-6 cursor-pointer hover:text-yellow-500" />
-            <FaSignOutAlt className="w-6 h-6 cursor-pointer hover:text-red-500" />
-          </div>
-        )}
+        <div className="flex flex-col space-y-2">
+          <FaRegStar className="w-6 h-6 cursor-pointer hover:text-yellow-500" />
+          <FaSignOutAlt className="w-6 h-6 cursor-pointer hover:text-red-500" />
+        </div>
       </div>
       {showFavorites && favoriteMovies.length > 0 && (
         <div className="absolute top-16 right-0 bg-gray-800 rounded-lg p-4 shadow-md">

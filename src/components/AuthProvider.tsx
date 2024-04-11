@@ -4,6 +4,7 @@ interface User {
   fullname: string;
   role: string;
   image: string;
+  userID: string;
 }
 
 interface AuthContextType {
