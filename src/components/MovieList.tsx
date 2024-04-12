@@ -13,6 +13,7 @@ interface Movie {
   description: string;
   thumbnailUrl: string;
   rating: number;
+  movieId: string;
 }
 
 interface MovieListProps {

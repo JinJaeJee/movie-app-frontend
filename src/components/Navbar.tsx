@@ -12,6 +12,7 @@ interface Movie {
   description: string;
   thumbnailUrl: string;
   rating: number;
+  movieId: string;
 }
 
 interface NavbarProps {
@@ -24,7 +25,6 @@ const Navbar: React.FC<NavbarProps> = ({
   removeFromFavorites,
 }) => {
   const { user, logout } = useAuth();
-  console.log("favoriteMovies", favoriteMovies);
 
   const [showFavorites, setShowFavorites] = useState(false);
 
@@ -35,8 +35,6 @@ const Navbar: React.FC<NavbarProps> = ({
   const handleLogout = () => {
     logout();
   };
-
-  console.log(user?.image);
 
   return (
     <header className="bg-zinc-900 px-4 py-2 flex justify-between items-center sticky top-0 z-50 transition duration-500 text-white pt-5">

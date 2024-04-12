@@ -14,6 +14,7 @@ interface Movie {
   description: string;
   thumbnailUrl: string;
   rating: number;
+  movieId: string;
 }
 
 const Home: React.FC = () => {
@@ -21,8 +22,6 @@ const Home: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
-
-  console.log(user?.userID);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -53,11 +52,10 @@ const Home: React.FC = () => {
         console.error("Error fetching favorite movies:", error);
       }
     };
-
     if (user?.userID) {
       fetchFavoriteMovies();
     }
-  }, []);
+  }, [user]);
 
   const handleSearch = async (searchParams: string) => {
     try {
@@ -71,15 +69,41 @@ const Home: React.FC = () => {
     }
   };
 
-  const addToFavorites = () => {};
+  const addToFavorites = async (movie: Movie) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3333/favorite-movies/add",
+        {
+          userId: user?.userID,
+          movieId: movie._id,
+          thumbnailUrl: movie.thumbnailUrl,
+          title: movie.title,
+        }
+      );
+      const updatedFavoriteMoviesResponse = await axios.get(
+        `http://localhost:3333/favorite-movies/${user?.userID}`
+      );
+      setFavoriteMovies(updatedFavoriteMoviesResponse.data);
 
-  const removeFromFavorites = (movie: Movie) => {
-    const userFavoritesKey = `user_${user?.userID}_favorites`;
-    const updatedFavorites = favoriteMovies.filter(
-      (m: Movie) => m._id !== movie._id
-    );
-    localStorage.setItem(userFavoritesKey, JSON.stringify(updatedFavorites));
-    setFavoriteMovies(updatedFavorites);
+      console.log("Added to favorites:", response.data);
+    } catch (err) {
+      console.error("Error adding to favorites:", err);
+    }
+  };
+
+  const removeFromFavorites = async (movie: Movie) => {
+    try {
+      await axios.delete("http://localhost:3333/favorite-movies/delete", {
+        data: { userId: user?.userID, movieId: movie.movieId },
+      });
+
+      const updatedFavoriteMoviesResponse = await axios.get(
+        `http://localhost:3333/favorite-movies/${user?.userID}`
+      );
+      setFavoriteMovies(updatedFavoriteMoviesResponse.data);
+    } catch (error) {
+      console.error("Error deleting movie:", error);
+    }
   };
 
   return (
