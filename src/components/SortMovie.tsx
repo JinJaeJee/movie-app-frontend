@@ -20,8 +20,8 @@ const SortMovies: React.FC<SortMoviesProps> = ({ onSort }) => {
         onChange={handleSortChange}
         className="border border-gray-300 rounded-md p-1 w-full sm:w-auto"
       >
-        <option value="ascending">Low to High</option>
-        <option value="descending">High to Low</option>
+        <option value="ascending">Oldest</option>
+        <option value="descending">Newest</option>
       </select>
       <label className="text-white mr-2" htmlFor="sort-by-rating">
         Sort by Rating:
