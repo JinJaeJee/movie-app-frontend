@@ -73,7 +73,10 @@ const Navbar: React.FC<NavbarProps> = ({
       </nav>
       <div className="flex gap-2 items-center justify-center md:hidden text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition duration-150 ease-in-out">
         <div className="flex flex-col space-y-2">
-          <FaRegStar className="w-6 h-6 cursor-pointer hover:text-yellow-500" />
+          <FaRegStar
+            className="w-6 h-6 cursor-pointer hover:text-yellow-500"
+            data-testid="star-icon"
+          />
           <FaSignOutAlt className="w-6 h-6 cursor-pointer hover:text-red-500" />
         </div>
       </div>
