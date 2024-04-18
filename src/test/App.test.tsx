@@ -110,14 +110,45 @@ describe("Home Component", () => {
   it("adds movie to favorites when star icon click", async () => {
     mockedAxios.get.mockResolvedValue({ data: movies });
     const { getByText, getByTestId } = render(<Home />);
-    await waitFor(() => {
-      expect(getByText("Movie 1")).toBeInTheDocument();
-    });
-    const starIcon = getByTestId("star-icon");
-    fireEvent.click(starIcon);
 
     await waitFor(() => {
       expect(getByText("Movie 1")).toBeInTheDocument();
     });
+    const checkListFavstarIcon = getByTestId("star-icon-check-fav");
+    const testIconName = `star-icon-add-fav-${movies[1]._id}`;
+    const addFavToList = getByTestId(testIconName);
+
+    fireEvent.click(addFavToList);
+    fireEvent.click(checkListFavstarIcon);
+
+    await waitFor(() => {
+      expect(getByTestId("favorite-movies-container")).toHaveTextContent(
+        "Movie 1"
+      );
+    });
+  });
+});
+
+describe("test fav delete", () => {
+  it("Remove a movie from the favorites list check no longer displayed", async () => {
+    mockedAxios.get.mockResolvedValue({ data: movies });
+    const { getByText, getByTestId } = render(<Home />);
+    await waitFor(() => {
+      expect(getByText("Movie 1")).toBeInTheDocument();
+    });
+
+    const checkListFavstarIcon = getByTestId("star-icon-check-fav");
+    const testIconName = `star-icon-add-fav-1`;
+    const addFavToList1 = getByTestId(testIconName);
+    fireEvent.click(addFavToList1);
+    fireEvent.click(checkListFavstarIcon);
+    await waitFor(() => {
+      expect(getByTestId("favorite-movies-container")).toHaveTextContent(
+        "Movie 1"
+      );
+    });
+    const trashBinIcon = getByTestId(`trash-icon-remove-fav-1`);
+    fireEvent.click(checkListFavstarIcon);
+    fireEvent.click(trashBinIcon);
   });
 });

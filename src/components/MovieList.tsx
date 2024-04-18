@@ -92,6 +92,7 @@ const MovieList: React.FC<MovieListProps> = ({ movies, addToFavorites }) => {
                     addToFavorites(movie);
                     e.stopPropagation();
                   }}
+                  data-testid={`star-icon-add-fav-${movie._id}`}
                 />
               </div>
             </div>

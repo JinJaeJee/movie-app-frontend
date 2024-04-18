@@ -61,7 +61,11 @@ const Navbar: React.FC<NavbarProps> = ({
           </a>
 
           <button className="text-white text-base font-medium hover:underline pr-4">
-            <FaRegStar className="w-5 h-5" onClick={toggleFavorites} />
+            <FaRegStar
+              className="w-5 h-5"
+              onClick={toggleFavorites}
+              data-testid="star-icon-check-fav"
+            />
           </button>
           <button
             className="text-white text-base font-medium hover:underline"
@@ -73,15 +77,15 @@ const Navbar: React.FC<NavbarProps> = ({
       </nav>
       <div className="flex gap-2 items-center justify-center md:hidden text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition duration-150 ease-in-out">
         <div className="flex flex-col space-y-2">
-          <FaRegStar
-            className="w-6 h-6 cursor-pointer hover:text-yellow-500"
-            data-testid="star-icon"
-          />
+          <FaRegStar className="w-6 h-6 cursor-pointer hover:text-yellow-500" />
           <FaSignOutAlt className="w-6 h-6 cursor-pointer hover:text-red-500" />
         </div>
       </div>
       {showFavorites && favoriteMovies.length > 0 && (
-        <div className="absolute top-16 right-0 bg-gray-800 rounded-lg p-4 shadow-md">
+        <div
+          className="absolute top-16 right-0 bg-gray-800 rounded-lg p-4 shadow-md"
+          data-testid="favorite-movies-container"
+        >
           <h3 className="text-white font-bold mb-2">Favorite Movies</h3>
           {favoriteMovies.map((movie, index) => (
             <div key={index} className="flex items-center justify-between mb-2">
@@ -89,12 +93,15 @@ const Navbar: React.FC<NavbarProps> = ({
                 src={movie.thumbnailUrl}
                 alt={movie.title}
                 className="w-10 h-10 rounded-md"
+                data-testid={`item-${movie._id}`}
               />
               <span className="text-white">{movie.title}</span>
-              <FaTrash
-                className="w-4 h-4 text-red-500 cursor-pointer"
-                onClick={() => removeFromFavorites(movie)}
-              />
+              <div data-testid={`trash-icon-remove-fav-${movie._id}`}>
+                <FaTrash
+                  className="w-4 h-4 text-red-500 cursor-pointer"
+                  onClick={() => removeFromFavorites(movie)}
+                />
+              </div>
             </div>
           ))}
         </div>
